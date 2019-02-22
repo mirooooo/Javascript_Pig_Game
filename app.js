@@ -17,7 +17,7 @@ GAME RULES:
 
 
 let scores = [0, 0];
-let roundeScore = 0;
+let roundedScore = 0;
 let activePlayer = 0;
 
 // document.querySelector('#current-' + activePlayer).textContent = dice;
@@ -46,29 +46,58 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
 
     if (dice !== 1) {
         // Add Score
-        roundeScore += dice;
-        document.querySelector('#current-' + activePlayer).textContent = roundeScore;
+        roundedScore += dice;
+        document.querySelector('#current-' + activePlayer).textContent = roundedScore;
     } else {
         // Next Player
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
-        roundeScore = 0;
-
-        document.getElementById('current-0').textContent = '0';
-        document.getElementById('current-1').textContent = '0';
-
-        // document.querySelector('.player-0-panel').classList.remove('active');
-        // document.querySelector('.player-1-panel').classList.add('active');
-
-        document.querySelector('.player-0-panel').classList.toggle('active');
-        document.querySelector('.player-1-panel').classList.toggle('active');
-
-        document.querySelector('.dice').style.display = 'none';
-
-
+       nextPlayer();
     }
-
 });
 
+document.querySelector('.btn-hold').addEventListener('click', function () { 
+    // Add current score to the Global Score
+    scores[activePlayer] += roundedScore;
+    // Update the UI
+    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
 
 
+    // Check if Player won a game 
+    if(scores[activePlayer] >= 10) {
+        document.getElementById('name-' + activePlayer).textContent = 'Winner';
+        document.querySelector('.dice').style.display = 'none';
+        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+
+    } else{
+
+        // Next Player
+        nextPlayer();
+    }
+
+
+
+
+
+
+
+
+ });
+
+// Helper Function DRY Principles
+function nextPlayer() {
+    // Next Player
+    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+    roundedScore = 0;
+
+    document.getElementById('current-0').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+
+    // document.querySelector('.player-0-panel').classList.remove('active');
+    // document.querySelector('.player-1-panel').classList.add('active');
+
+    document.querySelector('.player-0-panel').classList.toggle('active');
+    document.querySelector('.player-1-panel').classList.toggle('active');
+
+    document.querySelector('.dice').style.display = 'none';
+}
